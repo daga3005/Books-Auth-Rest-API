@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Nuevo Libro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .required {
+            color: #e74c3c;
+            margin-left: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .tag:hover {
+            background: #e0e0e0;
+        }
+
+        .tag.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .tag-input {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tag-input input {
+            flex: 1;
+        }
+
+        .btn-add-tag {
+            padding: 12px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add-tag:hover {
+            background: #45a049;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .rating-group input {
+            width: auto;
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-submit, .btn-reset {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3c3;
+        }
+
+        @media (max-width: 600px) {
+            .form-section {
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Registrar Nuevo Libro</h1>
+            <p>Completa el formulario para agregar un libro a la biblioteca</p>
+        </div>
+
+        <div class="form-section">
+            <!-- Mostrar mensajes -->
+            <% if (locals.error) { %>
+                <div class="error-message">
+                    ⚠️ <%= error %>
+                </div>
+            <% } %>
+            
+            <% if (locals.success) { %>
+                <div class="success-message">
+                    ✅ <%= success %>
+                </div>
+            <% } %>
+
+            <form action="/books" method="POST" id="bookForm">
+                <!-- Título -->
+                <div class="form-group">
+                    <label for="title">
+                        Título del libro <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           id="title" 
+                           name="title" 
+                           required 
+                           placeholder="Ej: Cien años de soledad"
+                           value="<%= locals.formData ? formData.title : '' %>">
+                </div>
+
+                <!-- Autor -->
+                <div class="form-group">
+                    <label for="author">
+                        Autor <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           id="author" 
+                           name="author" 
+                           required 
+                           placeholder="Ej: Gabriel García Márquez"
+                           value="<%= locals.formData ? formData.author : '' %>">
+                </div>
+
+                <!-- Año y Género (2 columnas) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="year">
+                            Año de publicación <span class="required">*</span>
+                        </label>
+                        <input type="number" 
+                               id="year" 
+                               name="year" 
+                               required 
+                               min="1000" 
+                               max="2025"
+                               placeholder="Ej: 1967"
+                               value="<%= locals.formData ? formData.year : '' %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="genre">
+                            Género <span class="required">*</span>
+                        </label>
+                        <select id="genre" name="genre" required>
+                            <option value="">Selecciona un género</option>
+                            <option value="Realismo mágico" <%= locals.formData && formData.genre === 'Realismo mágico' ? 'selected' : '' %>>Realismo mágico</option>
+                            <option value="Ciencia ficción" <%= locals.formData && formData.genre === 'Ciencia ficción' ? 'selected' : '' %>>Ciencia ficción</option>
+                            <option value="Novela romántica" <%= locals.formData && formData.genre === 'Novela romántica' ? 'selected' : '' %>>Novela romántica</option>
+                            <option value="Novela histórica" <%= locals.formData && formData.genre === 'Novela histórica' ? 'selected' : '' %>>Novela histórica</option>
+                            <option value="Terror" <%= locals.formData && formData.genre === 'Terror' ? 'selected' : '' %>>Terror</option>
+                            <option value="Aventura" <%= locals.formData && formData.genre === 'Aventura' ? 'selected' : '' %>>Aventura</option>
+                            <option value="Filosofía" <%= locals.formData && formData.genre === 'Filosofía' ? 'selected' : '' %>>Filosofía</option>
+                            <option value="Poesía" <%= locals.formData && formData.genre === 'Poesía' ? 'selected' : '' %>>Poesía</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Páginas y Editorial -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="pages">
+                            Número de páginas
+                        </label>
+                        <input type="number" 
+                               id="pages" 
+                               name="pages" 
+                               min="1"
+                               placeholder="Ej: 471"
+                               value="<%= locals.formData ? formData.pages : '' %>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="publisher">
+                            Editorial
+                        </label>
+                        <input type="text" 
+                               id="publisher" 
+                               name="publisher" 
+                               placeholder="Ej: Editorial Sudamericana"
+                               value="<%= locals.formData ? formData.publisher : '' %>">
+                    </div>
+                </div>
+
+                <!-- Idioma y Rating -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="language">
+                            Idioma original
+                        </label>
+                        <select id="language" name="language">
+                            <option value="">Selecciona un idioma</option>
+                            <option value="Español" <%= locals.formData && formData.language === 'Español' ? 'selected' : '' %>>Español</option>
+                            <option value="Inglés" <%= locals.formData && formData.language === 'Inglés' ? 'selected' : '' %>>Inglés</option>
+                            <option value="Francés" <%= locals.formData && formData.language === 'Francés' ? 'selected' : '' %>>Francés</option>
+                            <option value="Alemán" <%= locals.formData && formData.language === 'Alemán' ? 'selected' : '' %>>Alemán</option>
+                            <option value="Italiano" <%= locals.formData && formData.language === 'Italiano' ? 'selected' : '' %>>Italiano</option>
+                            <option value="Ruso" <%= locals.formData && formData.language === 'Ruso' ? 'selected' : '' %>>Ruso</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rating">
+                            Calificación (0-5)
+                        </label>
+                        <div class="rating-group">
+                            <input type="number" 
+                                   id="rating" 
+                                   name="rating" 
+                                   step="0.1" 
+                                   min="0" 
+                                   max="5"
+                                   placeholder="Ej: 4.8"
+                                   value="<%= locals.formData ? formData.rating : '' %>">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disponibilidad -->
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" 
+                               name="available" 
+                               value="true"
+                               <%= locals.formData && formData.available === 'true' ? 'checked' : 'checked' %>>
+                        Disponible para préstamo
+                    </label>
+                </div>
+
+                <!-- Resumen -->
+                <div class="form-group">
+                    <label for="summary">
+                        Resumen del libro
+                    </label>
+                    <textarea id="summary" 
+                              name="summary" 
+                              placeholder="Escribe un breve resumen del libro..."><%= locals.formData ? formData.summary : '' %></textarea>
+                </div>
+
+                <!-- Tags -->
+                <div class="form-group">
+                    <label>
+                        Tags / Etiquetas
+                    </label>
+                    <div class="tags-container" id="tagsContainer">
+                        <div class="tag" data-tag="clásico">clásico</div>
+                        <div class="tag" data-tag="moderno">moderno</div>
+                        <div class="tag" data-tag="best-seller">best-seller</div>
+                        <div class="tag" data-tag="premiado">premiado</div>
+                        <div class="tag" data-tag="favorito">favorito</div>
+                    </div>
+                    <div class="tag-input">
+                        <input type="text" id="customTag" placeholder="O escribe tu propio tag">
+                        <button type="button" class="btn-add-tag" onclick="addCustomTag()">+ Agregar</button>
+                    </div>
+                    <input type="hidden" id="tags" name="tags" value="">
+                </div>
+
+                <!-- Botones -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">📖 Registrar Libro</button>
+                    <button type="reset" class="btn-reset">🗑️ Limpiar Formulario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Manejo de tags
+        let selectedTags = [];
+
+        // Función para actualizar el campo oculto
+        function updateHiddenTags() {
+            document.getElementById('tags').value = JSON.stringify(selectedTags);
+        }
+
+        // Seleccionar/deseleccionar tags predefinidos
+        document.querySelectorAll('.tag').forEach(tagElement => {
+            tagElement.addEventListener('click', function() {
+                const tag = this.getAttribute('data-tag');
+                
+                if (selectedTags.includes(tag)) {
+                    selectedTags = selectedTags.filter(t => t !== tag);
+                    this.classList.remove('selected');
+                } else {
+                    selectedTags.push(tag);
+                    this.classList.add('selected');
+                }
+                
+                updateHiddenTags();
+            });
+        });
+
+        // Agregar tag personalizado
+        function addCustomTag() {
+            const customTagInput = document.getElementById('customTag');
+            const newTag = customTagInput.value.trim().toLowerCase();
+            
+            if (newTag && !selectedTags.includes(newTag)) {
+                selectedTags.push(newTag);
+                
+                // Crear elemento visual para el nuevo tag
+                const tagsContainer = document.getElementById('tagsContainer');
+                const newTagElement = document.createElement('div');
+                newTagElement.className = 'tag selected';
+                newTagElement.setAttribute('data-tag', newTag);
+                newTagElement.textContent = newTag;
+                newTagElement.addEventListener('click', function() {
+                    selectedTags = selectedTags.filter(t => t !== newTag);
+                    this.remove();
+                    updateHiddenTags();
+                });
+                
+                tagsContainer.appendChild(newTagElement);
+                customTagInput.value = '';
+                updateHiddenTags();
+            }
+        }
+
+        // Permitir agregar tag con Enter
+        document.getElementById('customTag').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCustomTag();
+            }
+        });
+
+        // Validación antes de enviar
+        document.getElementById('bookForm').addEventListener('submit', function(e) {
+            const title = document.getElementById('title').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const year = document.getElementById('year').value;
+            
+            if (!title || !author || !year) {
+                e.preventDefault();
+                alert('Por favor, completa los campos obligatorios (*)');
+                return false;
+            }
+            
+            updateHiddenTags();
+        });
+
+        // Limpiar tags al resetear el formulario
+        document.querySelector('button[type="reset"]').addEventListener('click', function() {
+            selectedTags = [];
+            document.querySelectorAll('.tag').forEach(tag => {
+                tag.classList.remove('selected');
+            });
+            updateHiddenTags();
+        });
+
+        // Inicializar tags existentes si hay datos del formulario
+       <% if (locals.formData && formData.tags) { %>
+    // Inicializar tags existentes
+    try {
+        const existingTags = typeof formData.tags === 'string' 
+            ? JSON.parse(formData.tags) 
+            : formData.tags;
+        
+        if (Array.isArray(existingTags)) {
+            existingTags.forEach(tag => {
+                if (tag && !selectedTags.includes(tag)) {
+                    selectedTags.push(tag);
+                    const tagElement = document.querySelector(`.tag[data-tag="${tag}"]`);
+                    if (tagElement) {
+                        tagElement.classList.add('selected');
+                    }
+                }
+            });
+            updateHiddenTags();
+        }
+    } catch(e) {
+        console.error('Error al cargar tags:', e);
+    }
+<% } %>
+    </script>
+</body>
+</html>
