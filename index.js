@@ -4,7 +4,8 @@ import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 
-import { router } from './router/routes.js'
+import  {userRouter}  from './router/userRoutes.js'
+import { booksRouter } from './router/booksRoutes.js'
 
 dotenv.config()
 
@@ -16,7 +17,9 @@ app.use(cookieParser())
 const Port= process.env.Port ?? 3000
 
 
-app.use(router),
+app.use(userRouter),
+app.use('/books',booksRouter),
+
 
 app.use(morgan('dev'))
 

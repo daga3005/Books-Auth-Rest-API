@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 
-import { PostgresModel } from "../models/postgres_model.js"
+import { PostgresModel } from "../models/postgres_user_model.js"
 import { validateLoginUser, validateRegisterUser } from "../schemas/user_schema.js"
 
 

@@ -1,0 +1,37 @@
+[
+  {
+    "nombre": "Cien años de soledad",
+    "autor": "Gabriel García Márquez",
+    "fecha": "1967-05-30",
+    "uuid": "123e4567-e89b-12d3-a456-426614174000",
+    "valoracion": 4.8
+  },
+  {
+    "nombre": "1984",
+    "autor": "George Orwell",
+    "fecha": "1949-06-08",
+    "uuid": "123e4567-e89b-12d3-a456-426614174001",
+    "valoracion": 4.7
+  },
+  {
+    "nombre": "El principito",
+    "autor": "Antoine de Saint-Exupéry",
+    "fecha": "1943-04-06",
+    "uuid": "123e4567-e89b-12d3-a456-426614174002",
+    "valoracion": 4.5
+  },
+  {
+    "nombre": "Don Quijote de la Mancha",
+    "autor": "Miguel de Cervantes",
+    "fecha": "1605-01-16",
+    "uuid": "123e4567-e89b-12d3-a456-426614174003",
+    "valoracion": 4.9
+  },
+  {
+    "nombre": "Matar a un ruiseñor",
+    "autor": "Harper Lee",
+    "fecha": "1960-07-11",
+    "uuid": "123e4567-e89b-12d3-a456-426614174004",
+    "valoracion": 4.6
+  }
+]

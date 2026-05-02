@@ -2,7 +2,7 @@
 
 Una API REST construida con **Node.js** y **Express** que implementa autenticación mediante **JWT** y manejo de sesiones con cookies. El proyecto usa **PostgreSQL** como base de datos y **EJS** como motor de plantillas.
 
-> ⚠️ **Estado del proyecto:** La autenticación (registro e inicio de sesión de usuarios) está completamente implementada. La funcionalidad para **listar y registrar libros está pendiente**, por lo que el proyecto aún no está 100% funcional.
+> ⚠️ **Estado del proyecto:** La autenticación (registro e inicio de sesión de usuarios) está completamente implementada así como ver la lista de libros y ver libros por ID. La funcionalidad para **registrar libros está pendiente**, por lo que el proyecto aún no está 100% funcional.
 
 ---
 
@@ -101,9 +101,17 @@ books-rest-api/
 - [x] Inicio de sesión con generación de JWT
 - [x] Manejo de sesión mediante cookies
 - [x] Validación de datos con Zod
-- [ ] Listar libros *(pendiente)*
+- [X] Listar libros 
 - [ ] Registrar libros *(pendiente)*
 
+## / EndPoints
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/register` | Registrar nuevo usuario |
+| POST | `/login` | Iniciar sesión |
+| GET | `/auth` | Página de autenticación ||
+| GET | `/api/libros` | Obtener todos los libros |
+| GET | `/api/libros/:id` | Obtener libro por ID |
 ---
 
 ## 📜 Scripts disponibles
