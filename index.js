@@ -3,6 +3,7 @@ import express from 'express'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 import  {userRouter}  from './router/userRoutes.js'
 import { booksRouter } from './router/booksRoutes.js'
@@ -10,6 +11,7 @@ import { booksRouter } from './router/booksRoutes.js'
 dotenv.config()
 
 const app= express()
+app.use(cors())
 app.use(express.json())
 app.set('view engine', 'ejs')
 app.use(cookieParser())
