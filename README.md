@@ -113,11 +113,11 @@ books-rest-api/
 | POST | `/login` | Iniciar sesión |
 | POST | `/logout` | Cerrar sesión |
 | GET | `/auth` | Página de autenticación |
-| GET | `/api/libros` | Obtener todos los libros |
-| GET | `/api/libros/:id` | Obtener libro por ID |
-| POST | `/api/libros` | Crear nuevo libro |
-| PUT | `/api/libros/:id` | Actualizar libro |
-| DELETE | `/api/libros/:id` | Eliminar libro |
+| GET | `/api/books` | Obtener todos los libros |
+| GET | `/api/books/:id` | Obtener libro por ID |
+| POST | `/api/books` | Crear nuevo libro |
+| PUT | `/api/books/:id` | Actualizar libro |
+| DELETE | `/api/books/:id` | Eliminar libro |
 ---
 Formato del archivo json de los libros:
 {
